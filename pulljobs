@@ -1,7 +1,7 @@
 #pulls data from Indeed API
 import urllib
 import csv
-
+ 
 u=urllib.urlopen('http://api.indeed.com/ads/apisearch?publisher=INSERTAPI&q=data+scientist&l=raleigh%2C+nc&sort=&radius=&st=&jt=&start=&limit=50&fromage=&filter=&latlong=1&co=us&chnl=&userip=70.123.123.218&useragent=Mozilla/%2F4.0%28Firefox%29&v=2')
 data= u.read()
 f = open('jobs.xml','wb')
