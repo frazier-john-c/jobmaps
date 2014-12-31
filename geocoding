@@ -1,0 +1,9 @@
+#How to get lat and long for an address (Geocoding)
+def geo( address ):
+	from geopy import geocoders
+	coder = geocoders.Bing("APIKEY")
+	result = coder.geocode(address,exactly_one=True)
+	lat = result.latitude
+	long = result.longitude
+	print lat
+	print long
