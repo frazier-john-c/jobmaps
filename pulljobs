@@ -1,0 +1,47 @@
+#pulls data from Indeed API
+import urllib
+import csv
+
+u=urllib.urlopen('http://api.indeed.com/ads/apisearch?publisher=INSERTAPI&q=data+scientist&l=raleigh%2C+nc&sort=&radius=&st=&jt=&start=&limit=50&fromage=&filter=&latlong=1&co=us&chnl=&userip=70.123.123.218&useragent=Mozilla/%2F4.0%28Firefox%29&v=2')
+data= u.read()
+f = open('jobs.xml','wb')
+f.write(data)
+f.close()
+
+
+from xml.etree.ElementTree import parse
+tree = parse('jobs.xml')
+#root=tree.getroot()
+
+requests= open('request.csv', 'wb')
+writer = csv.writer(requests, dialect='excel')
+writer.writerow(['jobtitle', 'company','city','state','country','formattedLocation','source','url','onmousedown','latitude','longitude','jobkey','sponsored','expired','indeedApply','formattedLocationFull','formattedRelativeTime','snippet'])
+
+#out = open( 'request.csv', 'wb' )
+#out.write( 'jobtitle,' + 'company,'+'city,'+'state,'+'country,'+'formattedLocation,'+'source,'+'snippet,'+'url,'+'onmousedown,'+'latitude,'+'longitude,'+'jobkey,'+'sponsored,'+'expired,'+'indeedApply,'+'formattedLocationFull,'+'formattedRelativeTime'+ '\r\n')
+
+for result in tree.iter('result'):
+	jobtitle=result.findtext('jobtitle').encode('utf-8')
+	company=result.findtext('company').encode('utf-8')
+	city=result.findtext('city').encode('utf-8')
+	state=result.findtext('state').encode('utf-8')
+	country=result.findtext('country').encode('utf-8')
+	formattedLocation=result.findtext('formattedLocation').encode('utf-8')
+	source=result.findtext('source').encode('utf-8')
+	snippet=result.findtext('snippet').encode('utf-8')
+	url=result.findtext('url').encode('utf-8')
+	onmousedown=result.findtext('onmousedown').encode('utf-8')
+	latitude=result.findtext('latitude').encode('utf-8')
+	longitude=result.findtext('longitude').encode('utf-8')
+	jobkey=result.findtext('jobkey').encode('utf-8')
+	sponsored=result.findtext('sponsored').encode('utf-8')
+	expired=result.findtext('expired').encode('utf-8')
+	indeedApply=result.findtext('indeedApply').encode('utf-8')
+	flFull=result.findtext('formattedLocationFull').encode('utf-8')
+	flTime=result.findtext('formattedRelativeTime').encode('utf-8')
+	#list=jobtitle,company,city,state,country,formattedLocation,source,snippet,url,onmousedown,latitude,longitude,jobkey,sponsored,expired,indeedApply,formattedLocationFull,formattedRelativeTime
+	writer.writerow([jobtitle, company, city, state, country, formattedLocation, source, url, onmousedown, latitude, longitude, jobkey, sponsored, expired, indeedApply, flFull, flTime, snippet])
+	
+#out.close()
+#print jobtitle, company, city, state, country, formattedLocation, source, snippet, latitude, longitude
+requests.close()
